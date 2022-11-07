@@ -1,10 +1,14 @@
 {
   "type": "postgres",
   "port": 5432,
-  "host": "localhost",
-  "username": "docker",
-  "password": "hubspot",
-  "database": "hubspot_tmp_db",
+  "host": "rentx_database",
+  "username": "adm_rentx",
+  "password": "rentx_password",
+  "database": "rentx",
+  "synchronize": true,
   "migrations": ["./src/database/migrations/*.ts"],
-  "entities": ["./src/modules/**/entities/*.ts"]
+  "entities": ["./src/modules/**/entities/*.ts"],
+  "cli": {
+    "migrationsDir": "./src/database/migrations"
+  }
 }
