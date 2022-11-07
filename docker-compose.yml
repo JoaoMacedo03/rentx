@@ -1,27 +1,30 @@
 version: "3.7"
 
-services: 
-  database_hubspot_tmp:
-    image: postgres
-    container_name: database_hubspot_tmp
+services:
+  rentx_database:
+    image: "postgres:14"
+    container_name: rentx_database
     restart: always
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
-      - POSTGRES_USER=docker
-      - POSTGRES_PASSWORD=hubspot
-      - POSTGRES_DB=hubspot_tmp_db
+      POSTGRES_USER: "adm_rentx"
+      POSTGRES_PASSWORD: "rentx_password"
+      POSTGRES_DB: "rentx"
     volumes:
-      - pgdata:/data/postgres
-    network_mode: host
+      - pgdata:/var/lib/postgres/data
   app:
     build: .
-    container_name: hubspot_template
+    container_name: rentx
+    restart: always
     ports:
       - 3333:3333
     volumes:
-      - .:/usr/hubspot
-    network_mode: host
+      - .:/usr/rentx
+    links:
+      - rentx_database
+    depends_on: 
+      - rentx_database
 
 volumes:
   pgdata:

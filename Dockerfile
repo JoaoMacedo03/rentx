@@ -1,6 +1,6 @@
-FROM node
+FROM node:latest
 
-WORKDIR /usr/hubspot
+WORKDIR /usr/rentx
 
 COPY package.json ./
 
@@ -11,3 +11,5 @@ COPY . .
 EXPOSE 3333
 
 CMD ["npm", "run", "dev"]
+
+
