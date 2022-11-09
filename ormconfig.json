@@ -6,9 +6,9 @@
   "password": "rentx_password",
   "database": "rentx",
   "synchronize": true,
-  "migrations": ["./src/database/migrations/*.ts"],
+  "migrations": ["./src/shared/database/typeorm/migrations/*.ts"],
   "entities": ["./src/modules/**/entities/*.ts"],
   "cli": {
-    "migrationsDir": "./src/database/migrations"
+    "migrationsDir": "./src/shared/database/typeorm/migrations"
   }
 }
