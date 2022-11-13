@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --respawn src/shared/infra/http/server.ts",
     "typeorm": "ts-node-dev -r tsconfig-paths/register node_modules/.bin/typeorm",
-    "migration:run": "ts-node-dev -r tsconfig-paths/register ./node_modules/.bin/typeorm migration:run -d ./src/database",
-    "migration:revert": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli migration:revert -d src/database",
-    "test": "jest"
+    "migration:run": "ts-node-dev -r tsconfig-paths/register ./node_modules/.bin/typeorm migration:run -d src/shared/database/typeorm/dataSource.ts",
+    "migration:revert": "ts-node-dev -r tsconfig-paths/register ./node_modules/.bin/typeorm migration:revert -d src/shared/database/typeorm/dataSource.ts",
+    "test": "jest",
+    "seed:admin": "ts-node-dev -r tsconfig-paths/register src/shared/database/typeorm/seeds/admin.ts"
   },
   "dependencies": {
     "axios": "^0.27.2",
