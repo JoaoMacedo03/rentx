@@ -1,1 +1,7 @@
 node_modules/
+coverage/
+.env
+dist/
+build/
+id_rsa_aws
+id_rsa_aws.pub
