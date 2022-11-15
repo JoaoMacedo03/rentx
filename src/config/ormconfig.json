@@ -5,7 +5,6 @@
   "username": "adm_rentx",
   "password": "rentx_password",
   "database": "rentx",
-  "synchronize": true,
   "migrations": ["./src/shared/database/typeorm/migrations/*.ts"],
   "entities": ["./src/modules/**/infra/typeorm/entities/*.ts"],
   "cli": {
