@@ -27,14 +27,14 @@ describe('Create Car', () => {
     expect(car).toHaveProperty('id');
   });
 
-  it('Should not be able to create a car with the same license plate', () => {
-    expect(async () => {
-      await createCarUseCase.execute(carMock);
+  it('Should not be able to create a car with the same license plate', async () => {
+    await createCarUseCase.execute(carMock);
 
-      carMock.name = 'Car 2';
+    carMock.name = 'Car 2';
 
-      await createCarUseCase.execute(carMock);
-    }).rejects.toBeInstanceOf(AppError);
+    await expect(createCarUseCase.execute(carMock)).rejects.toEqual(
+      new AppError('Car already exists!'),
+    );
   });
 
   it('Should create a car with available true by default', async () => {
