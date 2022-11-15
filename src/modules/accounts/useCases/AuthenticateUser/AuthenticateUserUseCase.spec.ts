@@ -1,5 +1,7 @@
 import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { UserRepositoryMock } from '@modules/accounts/repositories/mocks/UsersRepositoryMock';
+import { UsersTokensRepositoryMock } from '@modules/accounts/repositories/mocks/UsersTokensRepositoryMock';
+import { DayjsDateProvider } from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
 import { AppError } from '@shared/errors/AppError';
 
 import { CreateUserUseCase } from '../CreateUser/CreateUserUseCase';
@@ -8,6 +10,8 @@ import { AuthenticateUserUseCase } from './AuthenticateUserUseCase';
 let userRepositoryMock: UserRepositoryMock;
 let authenticateUserUseCase: AuthenticateUserUseCase;
 let createUserUseCase: CreateUserUseCase;
+let usersTokensRepositoryMock: UsersTokensRepositoryMock;
+let dateProvider: DayjsDateProvider;
 
 const user: ICreateUserDTO = {
   driver_license: '021902',
@@ -18,8 +22,14 @@ const user: ICreateUserDTO = {
 
 describe('Authenticate User', () => {
   beforeEach(() => {
+    dateProvider = new DayjsDateProvider();
     userRepositoryMock = new UserRepositoryMock();
-    authenticateUserUseCase = new AuthenticateUserUseCase(userRepositoryMock);
+    usersTokensRepositoryMock = new UsersTokensRepositoryMock();
+    authenticateUserUseCase = new AuthenticateUserUseCase(
+      userRepositoryMock,
+      usersTokensRepositoryMock,
+      dateProvider,
+    );
     createUserUseCase = new CreateUserUseCase(userRepositoryMock);
   });
 
@@ -34,23 +44,23 @@ describe('Authenticate User', () => {
     expect(result).toHaveProperty('token');
   });
 
-  it('Should not be able to authenticate an nonexistent user', () => {
-    expect(async () => {
-      await authenticateUserUseCase.execute({
+  it('Should not be able to authenticate an nonexistent user', async () => {
+    await expect(
+      authenticateUserUseCase.execute({
         email: 'false@email.com',
         password: 'test',
-      });
-    }).rejects.toBeInstanceOf(AppError);
+      }),
+    ).rejects.toEqual(new AppError('E-mail or password incorrect'));
   });
 
-  it('Should not be able to authenticate with incorrect password', () => {
-    expect(async () => {
-      await createUserUseCase.execute(user);
+  it('Should not be able to authenticate with incorrect password', async () => {
+    await createUserUseCase.execute(user);
 
-      await authenticateUserUseCase.execute({
+    await expect(
+      authenticateUserUseCase.execute({
         email: user.email,
         password: 'shouldNotWork',
-      });
-    }).rejects.toBeInstanceOf(AppError);
+      }),
+    ).rejects.toEqual(new AppError('E-mail or password incorrect'));
   });
 });
